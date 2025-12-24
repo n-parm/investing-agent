@@ -1,5 +1,6 @@
 import requests
-from bs4 import BeautifulSoup
+import warnings
+from bs4 import BeautifulSoup, FeatureNotFound
 from datetime import datetime
 from typing import List
 from .config import SEC_HEADERS, MAX_FILING_CHARS
@@ -19,7 +20,9 @@ def fetch_filings(cik: str) -> List[dict]:
         "primary_doc_url": str
       }
     """
-    url = SEC_SUBMISSIONS_URL.format(cik=cik.lstrip("0"))
+    # The SEC submissions endpoint expects the CIK zero-padded to 10 digits
+    cik_padded = str(cik).zfill(10)
+    url = SEC_SUBMISSIONS_URL.format(cik=cik_padded)
     r = requests.get(url, headers=SEC_HEADERS, timeout=20)
     r.raise_for_status()
     data = r.json()
@@ -60,6 +63,10 @@ def fetch_filings(cik: str) -> List[dict]:
 def extract_text(url: str) -> str:
     r = requests.get(url, headers=SEC_HEADERS, timeout=20)
     r.raise_for_status()
-    soup = BeautifulSoup(r.text, "lxml")
+    try:
+        soup = BeautifulSoup(r.text, "lxml")
+    except FeatureNotFound:
+        warnings.warn("lxml parser not available; falling back to html.parser")
+        soup = BeautifulSoup(r.text, "html.parser")
     text = soup.get_text(separator="\n")
     return text[:MAX_FILING_CHARS]

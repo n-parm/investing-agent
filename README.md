@@ -1,13 +1,15 @@
 # investing-agent
 Agent to assist with investing decisions
 
+- Checking contents of files bc they're all 115 characters
+
 ---
 
-## Project Summary: Smart Market Monitor AI Agent (MVP)
+### Project Summary: Smart Market Monitor AI Agent (MVP)
 
 I am building a small, monetizable AI agent to gain hands-on experience with autonomous agents. The MVP is a market monitoring and alerting tool, not a trading or recommendation system.
 
-### Core goal
+### Goal
 Detect and summarize material market-moving events for a narrow set of companies or keywords and deliver high-signal alerts quickly, without providing buy/sell advice.
 
 ### What the agent does

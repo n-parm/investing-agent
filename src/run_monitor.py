@@ -1,7 +1,10 @@
 """Orchestrator for fetching, filtering, analyzing, alerting, and persisting state."""
 import traceback
 from time import sleep
-from .config import TRACKED_COMPANIES
+from pathlib import Path
+import requests
+
+from .config import TRACKED_COMPANIES, SEC_HEADERS
 from .storage import storage
 from .edgar import fetch_filings, extract_text
 from .filters import prefilter, text_hash
@@ -27,8 +30,44 @@ def process_company(symbol: str, company: dict):
             print(f"Failed to fetch/extract {acc}: {e}")
             continue
 
-        if not prefilter(text):
-            print(f"Prefilter rejected {acc} (too short or boilerplate)")
+        # Per-form minimum length thresholds (characters)
+        FORM_MIN_CHARS = {
+            "4": 300,
+            "3": 300,
+            "5": 300,
+            "8-K": 800,
+            "10-Q": 2000,
+            "10-K": 3000,
+            "13F-HR": 1000,
+            "S-1": 2000,
+            "SC 13G": 800,
+            "SC 13D": 800,
+        }
+
+        form = (f.get("form_type") or "").upper().strip()
+        min_chars = FORM_MIN_CHARS.get(form, 1500)
+
+        # Log text length for tuning thresholds
+        text_len = len(text) if text else 0
+        print(f"Text length for {acc}: {text_len} characters (min required: {min_chars})")
+
+        # If the extracted text is unexpectedly short, save the raw response
+        # so you can inspect it locally (helps diagnose SEC blocks or parser
+        # issues). Files are written to src/debug_raw/{accession}.html
+        if text_len < max(500, min_chars):
+            try:
+                debug_dir = Path(__file__).parent / "debug_raw"
+                debug_dir.mkdir(exist_ok=True)
+                raw_path = debug_dir / f"{acc}.html"
+                r = requests.get(f["primary_doc_url"], headers=SEC_HEADERS, timeout=20)
+                r.raise_for_status()
+                raw_path.write_text(r.text, encoding="utf-8")
+                print(f"Saved raw response for {acc} to {raw_path}")
+            except Exception as e:
+                print(f"Failed to save raw response for {acc}: {e}")
+
+        if not prefilter(text, min_chars=min_chars):
+            print(f"Prefilter rejected {acc} (too short or boilerplate) - length {text_len} < {min_chars}")
             storage.mark_processed(acc, cik, f.get("form_type"), f.get("filing_date"))
             continue
 
