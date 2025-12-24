@@ -40,7 +40,7 @@ def process_company(symbol: str, company: dict):
             analysis = analyze_filing(text)
         except Exception as e:
             print(f"LLM analysis failed for {acc}: {e}")
-            # Per MVP rule: discard on JSON parse failure, mark processed so we don't retry.
+            # Discard on JSON parse failure for now, mark processed so we don't retry.
             storage.mark_processed(acc, cik, f.get("form_type"), f.get("filing_date"))
             continue
 

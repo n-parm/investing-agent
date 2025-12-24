@@ -2,8 +2,7 @@ from pathlib import Path
 
 # Single source of truth for tracked companies and runtime configuration
 TRACKED_COMPANIES = {
-    "AAPL": {"cik": "0000320193"},
-    "MSFT": {"cik": "0000789019"},
+    "GEHC": {"cik": "0002052410"},
 }
 
 ALERT_MIN_IMPACT = "Medium"
