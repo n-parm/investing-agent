@@ -48,6 +48,13 @@ State stored minimally (last processed filing, user preferences, alert history).
 - Data Source: SEC EDGAR 
     - API: https://www.sec.gov/search-filings/edgar-application-programming-interfaces
     - Primary Endpoint: https://data.sec.gov/submissions/CIK{CIK}.json
+- LLM Layer: Ollama + Llama 3 8B Instruct
+    - Runs locally
+    - Good summarization + classification
+    - No token costs
+    - JSON output enforcement via prompting
+- Scheduling: Cron (every 30-60 minutes)
+- Notifications: SMTP
 
 ### MVP scope
 
