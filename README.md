@@ -1,15 +1,6 @@
 # investing-agent
 Agent to assist with investing decisions
 
-- just downloaded WSL for ollama configuration
-
-Links
-
-- https://docs.ollama.com/
-- https://www.sec.gov/
-- https://sam.gov/
-- https://www.sec.gov/search-filings/edgar-application-programming-interfaces
-
 ---
 
 ### Project Summary: Smart Market Monitor AI Agent (MVP)
@@ -65,8 +56,15 @@ State stored minimally (last processed filing, user preferences, alert history).
 - Scheduling: Cron (every 30-60 minutes)
 - Notifications: SMTP
 
-### MVP scope
+---
 
-- One data source
-- One alert channel (email)
-- One narrow user niche (e.g., retail investors tracking a small set of stocks)
+### Just for me rn
+
+- need to set up ollama port
+
+Links
+
+- https://docs.ollama.com/
+- https://www.sec.gov/
+- https://sam.gov/
+- https://www.sec.gov/search-filings/edgar-application-programming-interfaces

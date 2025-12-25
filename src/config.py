@@ -8,7 +8,7 @@ TRACKED_COMPANIES = {
 ALERT_MIN_IMPACT = "Medium"
 
 # Ollama model identifier (MVP)
-OLLAMA_MODEL = "llama3:8b-instruct"
+OLLAMA_MODEL = "llama3:latest"
 
 # Max characters of filing text to feed the LLM
 MAX_FILING_CHARS = 15_000
