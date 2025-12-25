@@ -54,17 +54,17 @@ def process_company(symbol: str, company: dict):
         # If the extracted text is unexpectedly short, save the raw response
         # so you can inspect it locally (helps diagnose SEC blocks or parser
         # issues). Files are written to src/debug_raw/{accession}.html
-        if text_len < max(500, min_chars):
-            try:
-                debug_dir = Path(__file__).parent / "debug_raw"
-                debug_dir.mkdir(exist_ok=True)
-                raw_path = debug_dir / f"{acc}.html"
-                r = requests.get(f["primary_doc_url"], headers=SEC_HEADERS, timeout=20)
-                r.raise_for_status()
-                raw_path.write_text(r.text, encoding="utf-8")
-                print(f"Saved raw response for {acc} to {raw_path}")
-            except Exception as e:
-                print(f"Failed to save raw response for {acc}: {e}")
+        # if text_len < max(500, min_chars):
+        try:
+            debug_dir = Path(__file__).parent / "debug_raw"
+            debug_dir.mkdir(exist_ok=True)
+            raw_path = debug_dir / f"{acc}.html"
+            r = requests.get(f["primary_doc_url"], headers=SEC_HEADERS, timeout=20)
+            r.raise_for_status()
+            raw_path.write_text(r.text, encoding="utf-8")
+            print(f"Saved raw response for {acc} to {raw_path}")
+        except Exception as e:
+            print(f"Failed to save raw response for {acc}: {e}")
 
         if not prefilter(text, min_chars=min_chars):
             print(f"Prefilter rejected {acc} (too short or boilerplate) - length {text_len} < {min_chars}")
@@ -73,7 +73,7 @@ def process_company(symbol: str, company: dict):
 
         # Optional dedupe via hash could be persisted in future. For now compute hash for logging.
         thash = text_hash(text)
-        print(f"Text hash: {thash[:10]}...")
+        # print(f"Text hash: {thash[:10]}...")
 
         try:
             analysis = analyze_filing(text)

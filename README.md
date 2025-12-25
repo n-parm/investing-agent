@@ -1,7 +1,7 @@
 # investing-agent
 Agent to assist with investing decisions
 
-- Checking contents of files bc they're all 115 characters
+- 
 
 ---
 

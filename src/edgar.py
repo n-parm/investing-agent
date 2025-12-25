@@ -1,7 +1,6 @@
 import requests
 import warnings
 from bs4 import BeautifulSoup, FeatureNotFound
-from datetime import datetime
 from typing import List
 from .config import SEC_HEADERS, MAX_FILING_CHARS
 
@@ -41,7 +40,7 @@ def fetch_filings(cik: str) -> List[dict]:
             cik_int = str(int(cik))
         except Exception:
             cik_int = cik
-        primary_doc_url = f"https://www.sec.gov/ix?doc=/Archives/edgar/data/{cik_int}/{acc_no}/{pdoc}"
+        primary_doc_url = f"https://www.sec.gov/Archives/edgar/data/{cik_int}/{acc_no}/{pdoc}"
         filings.append(
             {
                 "accession_number": acc,
