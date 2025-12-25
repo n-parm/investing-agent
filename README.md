@@ -1,7 +1,14 @@
 # investing-agent
 Agent to assist with investing decisions
 
-- 
+- just downloaded WSL for ollama configuration
+
+Links
+
+- https://docs.ollama.com/
+- https://www.sec.gov/
+- https://sam.gov/
+- https://www.sec.gov/search-filings/edgar-application-programming-interfaces
 
 ---
 
