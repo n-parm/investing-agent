@@ -1,6 +1,8 @@
 # investing-agent
 Agent to assist with investing decisions
 
+Just start: `python -m src.run_monitor`
+
 ---
 
 ### Project Summary: Smart Market Monitor AI Agent (MVP)
@@ -60,7 +62,7 @@ State stored minimally (last processed filing, user preferences, alert history).
 
 ### Just for me rn
 
-- need to set up ollama port
+- fix ollama connection
 
 Links
 

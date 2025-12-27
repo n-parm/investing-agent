@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 # Single source of truth for tracked companies and runtime configuration
 TRACKED_COMPANIES = {
@@ -12,6 +13,9 @@ OLLAMA_MODEL = "llama3:latest"
 
 # Max characters of filing text to feed the LLM
 MAX_FILING_CHARS = 15_000
+
+# Full Ollama HTTP API URL (can be overridden with env var OLLAMA_URL)
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/chat")
 
 # SQLite DB path (relative to project)
 DB_PATH = str(Path(__file__).parent / "db.sqlite")
