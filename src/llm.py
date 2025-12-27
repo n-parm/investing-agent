@@ -4,14 +4,13 @@ import os
 import re
 import time
 import traceback
-from datetime import datetime
 import requests
 from requests.exceptions import RequestException
 from typing import Dict, Optional
 from .config import OLLAMA_MODEL, OLLAMA_URL
 
 # Environment-configurable parameters
-OLLAMA_CALL_TIMEOUT = int(os.getenv("OLLAMA_CALL_TIMEOUT", "30"))
+OLLAMA_CALL_TIMEOUT = int(os.getenv("OLLAMA_CALL_TIMEOUT", "60"))
 OLLAMA_CALL_RETRIES = int(os.getenv("OLLAMA_CALL_RETRIES", "3"))
 OLLAMA_STREAM_TIMEOUT = int(os.getenv("OLLAMA_STREAM_TIMEOUT", "120"))
 DEBUG_DUMP_DIR = os.path.join(os.path.dirname(__file__), "debug_raw")
@@ -54,6 +53,35 @@ def analyze_filing(text: str, model: str = OLLAMA_MODEL, temperature: float = 0.
             return data["message"].get("content")
         return data.get("text")
 
+    def _extract_first_json_object(s: str) -> Optional[str]:
+        """Find the first balanced JSON object in a string and return it, or None."""
+        if not s:
+            return None
+        # Find first opening brace
+        start = s.find("{")
+        if start == -1:
+            return None
+        in_string = False
+        escape = False
+        depth = 0
+        for i in range(start, len(s)):
+            ch = s[i]
+            if ch == '"' and not escape:
+                in_string = not in_string
+            if ch == '\\' and not escape:
+                escape = True
+                continue
+            else:
+                escape = False
+            if in_string:
+                continue
+            if ch == '{':
+                depth += 1
+            elif ch == '}':
+                depth -= 1
+                if depth == 0:
+                    return s[start:i+1]
+        return None
     max_attempts = OLLAMA_CALL_RETRIES
     for attempt in range(1, max_attempts + 1):
         try:
@@ -136,6 +164,13 @@ def analyze_filing(text: str, model: str = OLLAMA_MODEL, temperature: float = 0.
                     logging.debug("Wrote assembled streamed content to %s", dump_path)
                 except Exception:
                     logging.debug("Failed to write assembled dump: %s", traceback.format_exc())
+                # Attempt to salvage by extracting the first JSON object within the assembled text
+                extracted = _extract_first_json_object(assembled)
+                if extracted:
+                    try:
+                        return json.loads(extracted)
+                    except Exception as e2:
+                        logging.debug("Failed to parse extracted JSON object: %s", e2)
                 raise RuntimeError(f"Failed to parse assembled streamed content: {assembled} (error: {e})")
 
         # If we reach here, no usable assembled content was found
