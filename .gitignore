@@ -1,4 +1,5 @@
-venv
+.venv
 src/__pycache__/
 src/*.sqlite
 src/debug_raw
+.vscode

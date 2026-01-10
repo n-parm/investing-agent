@@ -1,6 +1,10 @@
 # investing-agent
 Agent to assist with investing decisions
 
+**Quick Start**
+
+Start Ollama LLM: ``
+
 Just start: `python -m src.run_monitor`
 
 ---
