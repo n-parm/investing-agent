@@ -1,7 +1,6 @@
 import sqlite3
 from datetime import datetime
 from typing import Optional
-from pathlib import Path
 import json
 from .config import DB_PATH
 

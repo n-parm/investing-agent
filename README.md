@@ -3,7 +3,7 @@ Agent to assist with investing decisions
 
 **Quick Start**
 
-Start Ollama LLM: ``
+Start Ollama LLM: `ollama serve llama3:latest`
 
 Just start: `python -m src.run_monitor`
 
@@ -66,7 +66,7 @@ State stored minimally (last processed filing, user preferences, alert history).
 
 ### Just for me rn
 
-- fix ollama connection
+- just redownloaded model
 
 Links
 

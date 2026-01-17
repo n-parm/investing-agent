@@ -63,9 +63,9 @@ def extract_text(url: str) -> str:
     r = requests.get(url, headers=SEC_HEADERS, timeout=20)
     r.raise_for_status()
     try:
-        soup = BeautifulSoup(r.text, "lxml")
+        soup = BeautifulSoup(r.text, "xml")
     except FeatureNotFound:
-        warnings.warn("lxml parser not available; falling back to html.parser")
+        warnings.warn("xml parser not available; falling back to html.parser")
         soup = BeautifulSoup(r.text, "html.parser")
     text = soup.get_text(separator="\n")
     return text[:MAX_FILING_CHARS]

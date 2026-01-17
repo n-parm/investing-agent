@@ -1,5 +1,8 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv(Path(__file__).parent / ".env")
 
 # Single source of truth for tracked companies and runtime configuration
 TRACKED_COMPANIES = {
@@ -28,10 +31,10 @@ SEC_HEADERS = {
 
 # SMTP placeholders for sending email alerts (fill before running)
 SMTP = {
-    "host": "smtp.example.com",
+    "host": "smtp.gmail.com",
     "port": 587,
-    "username": "you@example.com",
-    "password": "CHANGE_ME",
-    "from_addr": "alerts@example.com",
-    "to_addrs": ["you@example.com"],
+    "username": os.getenv("SMTP_USERNAME", "you@example.com"),
+    "password": os.getenv("SMTP_PASSWORD", "CHANGE_ME"),
+    "from_addr": os.getenv("SMTP_FROM", "alerts@example.com"),
+    "to_addrs": [os.getenv("SMTP_TO", "you@example.com")],
 }
