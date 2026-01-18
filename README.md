@@ -3,9 +3,19 @@ Agent to assist with investing decisions
 
 **Quick Start**
 
-Start Ollama LLM: `ollama serve llama3:latest`
+Start Ollama LLM: 
 
-Just start: `python -m src.run_monitor`
+```bash
+$env:OLLAMA_HOST = "0.0.0.0:11434"
+
+ollama serve llama3:latest
+```
+
+Just start: 
+
+```bash
+python -m src.run_monitor
+```
 
 ---
 
